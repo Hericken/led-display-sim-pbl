@@ -85,7 +85,7 @@ void led_canvas_set_pixel(struct LedCanvas *c, int x, int y, uint8_t r, uint8_t 
 
 void led_canvas_clear(struct LedCanvas *c)
 {
-    led_canvas_fill(c, 0, 0, 0);	
+    led_canvas_fill(c, 0, 0, 0);
 }
 
 
@@ -111,14 +111,14 @@ struct LedCanvas *led_matrix_create_offscreen_canvas(struct RGBLedMatrix *matrix
 struct LedCanvas* led_matrix_swap_on_vsync(struct RGBLedMatrix *matrix, struct LedCanvas *canvas)
 {
     int i, j, k, l, xx, yy;
-    
+
     for(i = 0; i < _panel_rows; i++) {
         for(j = 0; j < _panel_cols; j++) {
             for (k = 0; k < PIXEL_WIDTH; k++) {
                 for (l = 0; l < PIXEL_WIDTH; l++) {
-                    //hard coding 4 * 4
+                    //hard coding PIXEL_WIDTH is 5
                     if((!k && !l)||(!k && l==4)||(k==4 && !l)||(k==4 && l==4)) continue;
-                    
+
                     xx = k + (LINE_WIDTH + PIXEL_WIDTH) * j + LINE_WIDTH + SCALE_LENGTH;
                     yy = l + (LINE_WIDTH + PIXEL_WIDTH) * i + LINE_WIDTH + SCALE_LENGTH;
                     bmp_img->data[yy][xx].r = img_canvas[i][j].r;

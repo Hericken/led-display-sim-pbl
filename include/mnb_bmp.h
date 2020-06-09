@@ -20,7 +20,7 @@
 #define MAXHEIGHT  1000              /* 最大の高さ(pixel)        */
 
 //ピクセルの赤緑青の各輝度
-typedef struct {                      
+typedef struct {
     unsigned char r;
     unsigned char g;
     unsigned char b;

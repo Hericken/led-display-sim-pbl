@@ -39,5 +39,5 @@ if [ ! -e log/rectmp/tmp.mp4 ]; then
     exit 2
 fi
 TIME=$(date +%m%d_%H-%M-%S)
-mv log/rectmp/tmp.mp4 log/led_matrix_${TARGET}_${TIME}.mp4
-printf "save to file 'log/led_matrix_${TARGET}_${TIME}.mp4'\n"
+mv log/rectmp/tmp.mp4 log/led_matrix_${TIME}.mp4
+printf "save to file 'log/led_matrix_${TIME}.mp4'\n"

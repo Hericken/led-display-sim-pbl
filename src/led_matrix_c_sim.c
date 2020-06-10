@@ -13,24 +13,28 @@ struct RGBLedMatrix *led_matrix_create_from_options(
         int *argc,
         char ***argv)
 {
-    int i;
+    int i, x;
     char s[4];
 
     for(i = 1; i < *argc; i++) {
         if(!strncmp((*argv)[i], "--led-rows=", strlen("--led-rows="))) {
             //--led-rows
-            if(strlen((*argv)[i]) >= 16) {
-                fprintf(stderr, "set default size 64 as too large rows\n");
-            }
             strncpy(s, (*argv)[i]+11, strlen((*argv)[i])-11);
-            options->rows = atoi(s);
+            x = atoi(s);
+            if(x <= 0 | x >= 1000) {
+                fprintf(stderr, "set 64 size as %s is invalid value\n", s);
+            } else {
+                options->rows = atoi(s);
+            }
         } else if(!strncmp((*argv)[i], "--led-cols=", strlen("--led-cols="))) {
             //--led-cols
-            if(strlen((*argv)[i]) >= 16) {
-                fprintf(stderr, "set default size 64 as too large cols\n");
-            }
             strncpy(s, (*argv)[i]+11, strlen((*argv)[i])-11);
-            options->cols = atoi(s);
+            x = atoi(s);
+            if(x <= 0 | x >= 1000) {
+                fprintf(stderr, "set 64 size as %s is invalid value\n", s);
+            } else {
+                options->cols = atoi(s);
+            }
         } else if(!strcmp((*argv)[i], "--disable-recording")) {
             //--disable_recording
             disable_recording = 1;
@@ -40,15 +44,15 @@ struct RGBLedMatrix *led_matrix_create_from_options(
             strcat(log_image_path, "log/led_matrix_");
             strcat(log_image_path, now);
             strcat(log_image_path, "/");
+
             // log/ にディレクトリを作成する場合は先に log/ が必要
             mkdir("log", 0766);
             mkdir(log_image_path, 0766);
         } else if(!strncmp((*argv)[i], "--fps=", strlen("--fps="))) {
             //--fps
-            int x;
             strncpy(s, (*argv)[i] + strlen("--fps="), strlen((*argv)[i]) - strlen("--fps="));
             x = atoi(s);
-            if(x <= 0 || 60 < x) {
+            if(x <= 0 || 60 <= x) {
                 fprintf(stderr, "set 30 fps as %s is invalid value", s);
             } else {
                 recording_fps = x;

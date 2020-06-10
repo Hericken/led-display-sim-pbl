@@ -43,6 +43,16 @@ struct RGBLedMatrix *led_matrix_create_from_options(
             // log/ にディレクトリを作成する場合は先に log/ が必要
             mkdir("log", 0766);
             mkdir(log_image_path, 0766);
+        } else if(!strncmp((*argv)[i], "--fps=", strlen("--fps="))) {
+            //--fps
+            int x;
+            strncpy(s, (*argv)[i] + strlen("--fps="), strlen((*argv)[i]) - strlen("--fps="));
+            x = atoi(s);
+            if(x <= 0 || 60 < x) {
+                fprintf(stderr, "set 30 fps as %s is invalid value", s);
+            } else {
+                recording_fps = x;
+            }
         }
     }
     setPanelSize(options->rows, options->cols);

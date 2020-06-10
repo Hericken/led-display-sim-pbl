@@ -27,9 +27,18 @@ $ ./display main
 ```
 `src/xxxx.c` の場合は `main` を `xxxx` に置き換える.
 
-動画に出力しない場合は`--disable-recording`をつけて実行
-
 動画ファイルの保存先は `log/`
+
+## 実行時引数
+
+|引数                |説明                             |デフォルト値|
+|:------------------|--------------------------------|----------:|
+|--disable-recording|画を作成せず静止画を出力する          |1         |
+|--format=FORMAT    |動画の拡張子(mp4, gif, mkv...)を変更|gif       |
+|--led-cols=SIZE    |LED列数を SIZE に指定              |64        |
+|--led-rows=SIZE    |LED行数を SIZE に指定              |64        |
+|--fps=VALUE        |動画のfps(>0 <=60)                |30        |
+
 
 # プログラム
 

@@ -1,39 +1,60 @@
 #! /bin/bash
 
+usage_msg='Usage: ./display file [options]
+file はシュミレートする実行ファイル
+
+option
+--disable-recording     動画を作成せず静止画を出力する
+--format=FORMAT         動画の拡張子(mp4, gif, mkv...)を変更(default:gif)
+--fps=VALUE             動画のfps(>0 <=60) (default:30)
+--led-cols=SIZE         LED列数を SIZE に指定(default:64)
+--led-rows=SIZE         LED行数を SIZE に指定(default:64)
+'
+
 TIMEOUT_PATH=$(command -v timeout)
 TIMEOUT_PATH=${TIMEOUT_PATH:-"vendor/coreutils-8.32/src/timeout"}
 FFMPEG_PATH=$(command -v ffmpeg)
 FFMPEG_PATH=${FFMPEG_PATH:-"vendor/ffmpeg-4.2.3/ffmpeg"}
 
 if [ $# -lt 1 ]; then
-    printf "too few arguments  Usage:$0 [run file] [--disable-recording] [--led-rows=rowsize] [--led-cols=colsize]\n"
+    printf "too few arguments\n\n${usage_msg}"
     exit 2
 fi
 
 TARGET=$1
 shift
+
+# デフォルトの値
+ENCORD_REQUIRED=1
+FILE_FORMAT="gif"
+FPS=30
+
+while getopts "t:l-:" opt; do
+    optarg="$OPTARG"
+    [[ "$opt" = - ]] &&
+        opt="-${OPTARG%%=*}" &&
+        optarg="${OPTARG/${OPTARG%%=*}/}" &&
+        optarg="${optarg#=}"
+
+    case "-$opt" in
+            --disable-recording)
+                ENCORD_REQUIRED=1
+                ;;
+            --format)
+                FILE_FORMAT=${optarg}
+                ;;
+            --fps)
+                FPS="$optarg"
+                ;;
+            --*)
+                echo "$0: illegal option -- ${opt##-}" >&2
+                ;;
+    esac
+done
 printf "Running virtual LED display (timeout:30s)... "
 # "--foreground" によって Ctrl-C でも終了できるようにする
 ${TIMEOUT_PATH} --foreground 30 ./${TARGET} $@
 printf "Done\n"
-
-ENCORD_REQUIRED=1
-OPT=$@
-while getopts ":t:-:" OPT; do
-    case "$OPT" in
-    -)
-        case "${OPTARG}" in
-        disable-recording)
-            ENCORD_REQUIRED=0
-            ;;
-        esac
-        ;;
-    t)
-        FILE_FORMAT=${OPTARG}
-        ;;
-    esac
-done
-
 
 if [ ${ENCORD_REQUIRED} -eq 0 ]; then
     exit 0
@@ -44,9 +65,12 @@ if [ ! -e log/rectmp/0001.bmp ]; then
     exit 2
 fi
 
+
 #連番画像から動画生成
 printf "Writing to video file... "
-${FFMPEG_PATH} -r 30 -s 454x454 -i log/rectmp/%04d.bmp -b:v 6144k log/rectmp/tmp.mp4 -loglevel fatal
+VIDEO_FILE="log/rectmp/tmp.${FILE_FORMAT}"
+#454はhard cording
+${FFMPEG_PATH} -s 454x454 -framerate ${FPS} -i log/rectmp/%04d.bmp -r ${FPS} -b:v 6144k ${VIDEO_FILE} -loglevel fatal
 
 if [ $? = 0 ]; then
     printf "Done\n"
@@ -56,10 +80,10 @@ else
 fi
 
 rm log/rectmp/*.bmp
-if [ ! -e log/rectmp/tmp.mp4 ]; then
-    printf "'log/rectmp/tmp.mp4': No such file\n"
+if [ ! -e ${VIDEO_FILE} ]; then
+    printf "'${VIDEO_FILE}': No such file\n"
     exit 2
 fi
 TIME=$(date +%m%d_%H-%M-%S)
-mv log/rectmp/tmp.mp4 log/led_matrix_${TARGET}_${TIME}.mp4
-printf "save to file 'log/led_matrix_${TARGET}_${TIME}.mp4'\n"
+mv ${VIDEO_FILE} log/led_matrix${TIME}.${FILE_FORMAT}
+printf "save to file 'log/led_matrix${TIME}.${FILE_FORMAT}'\n"

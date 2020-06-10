@@ -45,6 +45,7 @@ extern int _panel_rows;
 extern int _panel_cols;
 
 //LEDディスプレイの動画を書出すかどうかのフラグ
+//デフォルトは0(書出す)
 extern int disable_recording;
 
 //disable_recording=1 の時に静止画が出力されるパス
@@ -52,6 +53,9 @@ extern char log_image_path[32];
 
 //静止画を出力した回数
 extern int still_image_count;
+
+//動画書出しのfps　デフォルトは30
+extern int recording_fps;
 /*
    関数名: ReadBmp
    引数  : char *filename, img *imgp

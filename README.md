@@ -33,7 +33,7 @@ $ ./display main
 
 |引数                |説明                             |デフォルト値|
 |:------------------|--------------------------------|----------:|
-|--disable-recording|画を作成せず静止画を出力する          |1         |
+|--disable-recording|画を作成せず静止画を出力する          |          |
 |--format=FORMAT    |動画の拡張子(mp4, gif, mkv...)を変更|gif       |
 |--led-cols=SIZE    |LED列数を SIZE に指定              |64        |
 |--led-rows=SIZE    |LED行数を SIZE に指定              |64        |
@@ -62,7 +62,7 @@ if(pthread_create(&recthread, NULL, (void*)takeTimelapse, NULL)) {
 
 ### matrix生成時
 
-```
+```c
 struct RGBLedMatrixOptions options;
 memset(&options, 0, sizeof(options));
 options.rows = 32;
@@ -82,12 +82,12 @@ main関数で必要なライブラリ
 ```c
 #include "led-matrix-c.h"   //いつも必要
 #include "mnb_bmp.h"        //動画書出し時は必要
-#include <pthread>          //動画書出し時は必要
+#include <pthread.h>        //動画書出し時は必要
 ```
 
 ## 関数
 
-`include/led-matrix-c.h` に詳細があり, 実機LEDディスプレイで実行する場合はこれを参照する.
+詳細は`include/led-matrix-c.h` にあり, 実機LEDディスプレイで実行する場合はこれを参照する.
 
 動画ファイルに書き出す場合は一部の挙動が違う or 未実装があり, 以下に記載する.
 

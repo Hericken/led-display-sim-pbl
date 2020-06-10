@@ -44,6 +44,14 @@ extern int _panel_rows;
 //仮想LEDディスプレイのLED列数
 extern int _panel_cols;
 
+//LEDディスプレイの動画を書出すかどうかのフラグ
+extern int disable_recording;
+
+//disable_recording=1 の時に静止画が出力されるパス
+extern char log_image_path[32];
+
+//静止画を出力した回数
+extern int still_image_count;
 /*
    関数名: ReadBmp
    引数  : char *filename, img *imgp

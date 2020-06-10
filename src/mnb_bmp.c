@@ -16,6 +16,10 @@
 img *bmp_img;
 color **img_canvas;
 int _panel_rows, _panel_cols;
+int disable_recording = 0;
+char log_image_path[32];
+int still_image_count = 0;
+
 
 void ReadBmp(char *filename, img *imgp)
 {
@@ -305,12 +309,13 @@ void initBmpImg()
 
 void takeTimelapse()
 {
+    if(disable_recording) return;
     int i;
     //"log/rectmp/0000.bmp"
     char fname[21];
 
     mkdir("log", 0766);
-    mkdir("log/rectmp", 0766);
+    // mkdir("log/rectmp", 0766);
 
     for(i = 1; i < 10000; i++) {
         sprintf(fname, "log/rectmp/%04d.bmp", i);

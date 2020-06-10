@@ -27,6 +27,8 @@ $ ./display main
 ```
 `src/xxxx.c` の場合は `main` を `xxxx` に置き換える.
 
+動画に出力しない場合は`--disable-recording`をつけて実行
+
 動画ファイルの保存先は `log/`
 
 # プログラム
@@ -40,7 +42,7 @@ if(pthread_create(&recthread, NULL, (void*)takeTimelapse, NULL)) {
     return -1;
 }
 ```
-`pthread` は `<pthread>` をインクルードする必要あり.
+`pthread` は `<pthread.h>` をインクルードする必要あり.
 
 ## パネルサイズ
 

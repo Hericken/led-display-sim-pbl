@@ -6,7 +6,7 @@ FFMPEG_PATH=$(command -v ffmpeg)
 FFMPEG_PATH=${FFMPEG_PATH:-"vendor/ffmpeg-4.2.3/ffmpeg"}
 
 if [ $# -lt 1 ]; then
-    printf "too few arguments  Usage:$0 [run file] [option]\n"
+    printf "too few arguments  Usage:$0 [run file] [--disable-recording] [--led-rows=rowsize] [--led-cols=colsize]\n"
     exit 2
 fi
 
@@ -16,6 +16,28 @@ printf "Running virtual LED display (timeout:30s)... "
 # "--foreground" によって Ctrl-C でも終了できるようにする
 ${TIMEOUT_PATH} --foreground 30 ./${TARGET} $@
 printf "Done\n"
+
+ENCORD_REQUIRED=1
+OPT=$@
+while getopts ":t:-:" OPT; do
+    case "$OPT" in
+    -)
+        case "${OPTARG}" in
+        disable-recording)
+            ENCORD_REQUIRED=0
+            ;;
+        esac
+        ;;
+    t)
+        FILE_FORMAT=${OPTARG}
+        ;;
+    esac
+done
+
+
+if [ ${ENCORD_REQUIRED} -eq 0 ]; then
+    exit 0
+fi
 
 if [ ! -e log/rectmp/0001.bmp ]; then
     printf "No bmp file in 'log/rectmp' directory\n"

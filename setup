@@ -14,7 +14,7 @@ if [[ ! -x $(command -v timeout) ]] && [[ ! -x $(command -v vendor/coreutils-8.3
     mkdir coreutils
     ./configure
     make
-    cd ../
+    cd ../../
 fi
 
 #ffmpegの導入

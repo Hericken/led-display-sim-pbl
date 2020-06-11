@@ -40,7 +40,7 @@ while getopts "t:l-:" opt; do
 
     case "-$opt" in
             --disable-recording)
-                ENCORD_REQUIRED=1
+                ENCORD_REQUIRED=0
                 ;;
             --format)
                 FILE_FORMAT=${optarg}

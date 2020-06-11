@@ -35,11 +35,11 @@ $ ./display main
 
 | 引数                | 説明                               | デフォルト値 |
 | :------------------ | ---------------------------------- | -----------: |
-| --disable-recording | 画を作成せず静止画を出力する       |              |
+| --disable-recording | 動画を作成せず静止画を出力する       |              |
 | --format=FORMAT     | 動画の拡張子(mp4,gif,mkv...)を変更 |          gif |
+| --fps=VALUE         | 動画のfps(>0<=60)                  |           30 |
 | --led-cols=SIZE     | LED列数をSIZEに指定                |           64 |
 | --led-rows=SIZE     | LED行数をSIZEに指定                |           64 |
-| --fps=VALUE         | 動画のfps(>0<=60)                  |           30 |
 
 
 # プログラム

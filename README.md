@@ -31,13 +31,13 @@ $ ./display main
 
 ## 実行時引数
 
-|引数                |説明                             |デフォルト値|
-|:------------------|--------------------------------|----------:|
-|--disable-recording|画を作成せず静止画を出力する          |          |
-|--format=FORMAT    |動画の拡張子(mp4, gif, mkv...)を変更|gif       |
-|--led-cols=SIZE    |LED列数を SIZE に指定              |64        |
-|--led-rows=SIZE    |LED行数を SIZE に指定              |64        |
-|--fps=VALUE        |動画のfps(>0 <=60)                |30        |
+| 引数                | 説明                               | デフォルト値 |
+| :------------------ | ---------------------------------- | -----------: |
+| --disable-recording | 画を作成せず静止画を出力する       |              |
+| --format=FORMAT     | 動画の拡張子(mp4,gif,mkv...)を変更 |          gif |
+| --led-cols=SIZE     | LED列数をSIZEに指定                |           64 |
+| --led-rows=SIZE     | LED行数をSIZEに指定                |           64 |
+| --fps=VALUE         | 動画のfps(>0<=60)                  |           30 |
 
 
 # プログラム

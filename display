@@ -3,12 +3,14 @@
 usage_msg='Usage: ./display file [options]
 file はシュミレートする実行ファイル
 
-option
+実機動作と共通 option
+--led-cols=SIZE         LED列数を SIZE に指定(default:64)
+--led-rows=SIZE         LED行数を SIZE に指定(default:64)
+
+シュミレート option
 --disable-recording     動画を作成せず静止画を出力する
 --format=FORMAT         動画の拡張子(mp4, gif, mkv...)を変更(default:gif)
 --fps=VALUE             動画のfps(>0 <=60) (default:30)
---led-cols=SIZE         LED列数を SIZE に指定(default:64)
---led-rows=SIZE         LED行数を SIZE に指定(default:64)
 '
 
 TIMEOUT_PATH=$(command -v timeout)
@@ -17,7 +19,7 @@ FFMPEG_PATH=$(command -v ffmpeg)
 FFMPEG_PATH=${FFMPEG_PATH:-"vendor/ffmpeg-4.2.3/ffmpeg"}
 
 if [ $# -lt 1 ]; then
-    printf "too few arguments\n\n${usage_msg}"
+    printf "${usage_msg}"
     exit 2
 fi
 

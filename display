@@ -46,7 +46,11 @@ while getopts "t:l-:" opt; do
                 FILE_FORMAT=${optarg}
                 ;;
             --fps)
-                FPS="$optarg"
+                if [ $optarg -le 0 ] || [ $optarg -gt 30 ]; then
+                    FPS=30
+                else
+                    FPS="$optarg"
+                fi
                 ;;
             --*)
                 echo "$0: illegal option -- ${opt##-}" >&2

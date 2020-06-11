@@ -22,6 +22,7 @@ struct RGBLedMatrix *led_matrix_create_from_options(
             strncpy(s, (*argv)[i]+11, strlen((*argv)[i])-11);
             x = atoi(s);
             if(x <= 0 | x >= 1000) {
+                s[strlen(s)] = '\0';
                 fprintf(stderr, "set 64 size as %s is invalid value\n", s);
             } else {
                 options->rows = atoi(s);
@@ -31,6 +32,7 @@ struct RGBLedMatrix *led_matrix_create_from_options(
             strncpy(s, (*argv)[i]+11, strlen((*argv)[i])-11);
             x = atoi(s);
             if(x <= 0 | x >= 1000) {
+                s[strlen(s)] = '\0';
                 fprintf(stderr, "set 64 size as %s is invalid value\n", s);
             } else {
                 options->cols = atoi(s);
@@ -52,7 +54,8 @@ struct RGBLedMatrix *led_matrix_create_from_options(
             //--fps
             strncpy(s, (*argv)[i] + strlen("--fps="), strlen((*argv)[i]) - strlen("--fps="));
             x = atoi(s);
-            if(x <= 0 || 60 <= x) {
+            if(x <= 0 || 30 < x) {
+                s[strlen(s)] = '\0';
                 fprintf(stderr, "set 30 fps as %s is invalid value", s);
             } else {
                 recording_fps = x;

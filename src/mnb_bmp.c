@@ -316,7 +316,7 @@ void takeTimelapse()
     char fname[21];
 
     mkdir("log", 0766);
-    // mkdir("log/rectmp", 0766);
+    mkdir("log/rectmp", 0766);
 
     for(i = 1; i < 10000; i++) {
         sprintf(fname, "log/rectmp/%04d.bmp", i);

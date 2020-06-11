@@ -2,7 +2,7 @@ INCDIR = ./include
 SRCDIR = ./src
 OBJDIR = ./obj
 CC     = gcc
-CFLAGS = -O2
+CFLAGS = -O3
 
 all: main
 

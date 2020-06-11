@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <time.h>
 
 struct RGBLedMatrix {};
 
@@ -11,22 +13,53 @@ struct RGBLedMatrix *led_matrix_create_from_options(
         int *argc,
         char ***argv)
 {
-    int i;
+    int i, x;
     char s[4];
 
     for(i = 1; i < *argc; i++) {
         if(!strncmp((*argv)[i], "--led-rows=", strlen("--led-rows="))) {
-            if(strlen((*argv)[i]) >= 16) {
-                fprintf(stderr, "set default size 64 as too large rows\n");
-            }
+            //--led-rows
             strncpy(s, (*argv)[i]+11, strlen((*argv)[i])-11);
-            options->rows = atoi(s);
+            x = atoi(s);
+            if(x <= 0 | x >= 1000) {
+                s[strlen(s)] = '\0';
+                fprintf(stderr, "set 64 size as %s is invalid value\n", s);
+            } else {
+                options->rows = atoi(s);
+            }
         } else if(!strncmp((*argv)[i], "--led-cols=", strlen("--led-cols="))) {
-            if(strlen((*argv)[i]) >= 16) {
-                fprintf(stderr, "set default size 64 as too large cols\n");
-            }
+            //--led-cols
             strncpy(s, (*argv)[i]+11, strlen((*argv)[i])-11);
-            options->cols = atoi(s);
+            x = atoi(s);
+            if(x <= 0 | x >= 1000) {
+                s[strlen(s)] = '\0';
+                fprintf(stderr, "set 64 size as %s is invalid value\n", s);
+            } else {
+                options->cols = atoi(s);
+            }
+        } else if(!strcmp((*argv)[i], "--disable-recording")) {
+            //--disable_recording
+            disable_recording = 1;
+            char now[14];
+            size_t t = time(NULL);
+            strftime(now, sizeof(now), "%m%d_%H-%M-%S", localtime(&t));
+            strcat(log_image_path, "log/led_matrix_");
+            strcat(log_image_path, now);
+            strcat(log_image_path, "/");
+
+            // log/ にディレクトリを作成する場合は先に log/ が必要
+            mkdir("log", 0766);
+            mkdir(log_image_path, 0766);
+        } else if(!strncmp((*argv)[i], "--fps=", strlen("--fps="))) {
+            //--fps
+            strncpy(s, (*argv)[i] + strlen("--fps="), strlen((*argv)[i]) - strlen("--fps="));
+            x = atoi(s);
+            if(x <= 0 || 30 < x) {
+                s[strlen(s)] = '\0';
+                fprintf(stderr, "set 30 fps as %s is invalid value", s);
+            } else {
+                recording_fps = x;
+            }
         }
     }
     setPanelSize(options->rows, options->cols);
@@ -108,7 +141,7 @@ struct LedCanvas *led_matrix_create_offscreen_canvas(struct RGBLedMatrix *matrix
 }
 
 
-struct LedCanvas* led_matrix_swap_on_vsync(struct RGBLedMatrix *matrix, struct LedCanvas *canvas)
+struct LedCanvas *led_matrix_swap_on_vsync(struct RGBLedMatrix *matrix, struct LedCanvas *canvas)
 {
     int i, j, k, l, xx, yy;
 
@@ -127,6 +160,15 @@ struct LedCanvas* led_matrix_swap_on_vsync(struct RGBLedMatrix *matrix, struct L
                 }
             }
         }
+    }
+
+    if(disable_recording) {
+        char fname[64] = "";
+        char img_fname[9];
+        sprintf(img_fname, "%04d.bmp", still_image_count++);
+        strcat(fname, log_image_path);
+        strcat(fname, img_fname);
+        WriteBmp(fname, bmp_img);
     }
     return canvas;
 }
